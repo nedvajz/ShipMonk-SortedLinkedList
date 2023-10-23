@@ -1,14 +1,11 @@
 <?php
+declare(strict_types = 1);
 
-namespace Ondra\ShipmonkTest\IntegerList;
+namespace Ondra\ShipmonkTest\Node;
 
 use InvalidArgumentException;
-use Ondra\ShipmonkTest\Core\NodeInterface;
 
-/**
-* @template int
-*/
-class IntNode implements NodeInterface
+class IntegerNode implements NodeInterface
 {
     private ?NodeInterface $next = null;
 
@@ -18,7 +15,7 @@ class IntNode implements NodeInterface
     {
     }
 
-    public function getNext(): ?IntNode
+    public function getNext(): ?IntegerNode
     {
         return $this->next;
     }
@@ -28,14 +25,17 @@ class IntNode implements NodeInterface
         $this->next = $node;
     }
 
-    public function getValue(): int
+    /**
+     * @return int
+     */
+    public function getValue()
     {
         return $this->value;
     }
 
     public function isBefore(NodeInterface $anotherNode): bool
     {
-        if ($anotherNode instanceof IntNode === false) {
+        if ($anotherNode instanceof IntegerNode === false) {
             throw new InvalidArgumentException('Node must be instance of IntNode');
         }
 

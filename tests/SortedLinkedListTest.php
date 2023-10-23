@@ -3,15 +3,17 @@ declare(strict_types = 1);
 
 namespace Ondra\ShipmonkTest\IntegerList;
 
-use Ondra\ShipmonkTest\SortedLinkedListFactory;
+use InvalidArgumentException;
+use Ondra\ShipmonkTest\SortedLinkedList;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 
 class SortedLinkedListTest extends TestCase
 {
 
     public function testIntList(): void
     {
-        $sortedLinkedList = SortedLinkedListFactory::createIntegerSortedLinkedList();
+        $sortedLinkedList = new SortedLinkedList();
         $sortedLinkedList->add(1);
 
         self::assertSame(1, $sortedLinkedList->getFirst());
@@ -32,11 +34,14 @@ class SortedLinkedListTest extends TestCase
         self::assertSame(3, $sortedLinkedList->getNext());
         self::assertSame(5, $sortedLinkedList->getNext());
         self::assertSame(7, $sortedLinkedList->getNext());
+
+        $this->expectExceptionObject(new InvalidArgumentException('Unsupported type'));
+        $sortedLinkedList->add('ahoj');
     }
 
     public function testStringList(): void
     {
-        $sortedLinkedList = SortedLinkedListFactory::createStringSortedLinkedList();
+        $sortedLinkedList = new SortedLinkedList();
         $sortedLinkedList->add('ahoj');
 
         self::assertSame('ahoj', $sortedLinkedList->getFirst());
@@ -57,5 +62,44 @@ class SortedLinkedListTest extends TestCase
         self::assertSame('d', $sortedLinkedList->getNext());
         self::assertSame('q', $sortedLinkedList->getNext());
         self::assertSame('z', $sortedLinkedList->getNext());
+
+        $this->expectExceptionObject(new InvalidArgumentException('Unsupported type'));
+        $sortedLinkedList->add(1);
+    }
+
+    public function testRemove(): void
+    {
+        $sortedLinkedList = new SortedLinkedList();
+        $sortedLinkedList->add(1);
+        $sortedLinkedList->add(5);
+        $sortedLinkedList->add(3);
+
+        self::assertSame(3, $sortedLinkedList->count());
+        $sortedLinkedList->remove(3);
+
+        self::assertSame(2, $sortedLinkedList->count());
+        self::assertSame(1, $sortedLinkedList->getFirst());
+        self::assertSame(5, $sortedLinkedList->getLast());
+    }
+
+    /**
+     * @dataProvider unsupportedTypeGenerator
+     */
+    public function testAddUnsupportedType($value): void
+    {
+        $sortedLinkedList = new SortedLinkedList();
+
+        $this->expectExceptionObject(new InvalidArgumentException('Unsupported type'));
+        $sortedLinkedList->add($value);
+    }
+
+
+    public function unsupportedTypeGenerator(): \Generator
+    {
+        yield [1.1];
+        yield [true];
+        yield [null];
+        yield [[]];
+        yield [new stdClass()];
     }
 }

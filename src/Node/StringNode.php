@@ -1,13 +1,10 @@
 <?php
+declare(strict_types = 1);
 
-namespace Ondra\ShipmonkTest\StringList;
+namespace Ondra\ShipmonkTest\Node;
 
 use InvalidArgumentException;
-use Ondra\ShipmonkTest\Core\NodeInterface;
 
-/**
-* @template string
-*/
 class StringNode implements NodeInterface
 {
     private ?NodeInterface $next = null;
@@ -28,7 +25,10 @@ class StringNode implements NodeInterface
         $this->next = $node;
     }
 
-    public function getValue(): string
+    /**
+     * @return string
+     */
+    public function getValue()
     {
         return $this->value;
     }
