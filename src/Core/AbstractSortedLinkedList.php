@@ -10,18 +10,20 @@ class AbstractSortedLinkedList
 
     protected function addNode(NodeInterface $node): void
     {
-        if ($this->head === null) {
+        $isInitialNode = $this->head === null;
+        if ($isInitialNode) {
             $this->head = $node;
             $this->current = $node;
-        } else {
-            $beforeNode = $this->getLastLessThan($this->head, $node);
-            $nextNode = $beforeNode->getNext();
-            $beforeNode->setNext($node);
-            $node->setNext($nextNode);
+            return;
         }
+
+        $beforeNode = $this->getLastBefore($this->head, $node);
+        $nextNode = $beforeNode->getNext();
+        $beforeNode->setNext($node);
+        $node->setNext($nextNode);
     }
 
-    protected function getLastLessThan(NodeInterface $listedNode, NodeInterface $newNode): NodeInterface
+    protected function getLastBefore(NodeInterface $listedNode, NodeInterface $newNode): NodeInterface
     {
         $nextNode = $listedNode->getNext();
         if ($nextNode === null) {
@@ -29,7 +31,7 @@ class AbstractSortedLinkedList
         }
 
         if ($nextNode->isBefore($newNode)) {
-            return $this->getLastLessThan($nextNode, $newNode);
+            return $this->getLastBefore($nextNode, $newNode);
         }
 
         return $listedNode;

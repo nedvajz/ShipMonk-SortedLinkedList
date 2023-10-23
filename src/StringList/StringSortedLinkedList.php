@@ -3,30 +3,28 @@ declare(strict_types = 1);
 
 namespace Ondra\ShipmonkTest\StringList;
 
+use Ondra\ShipmonkTest\Core\AbstractSortedLinkedList;
 use Ondra\ShipmonkTest\Core\NodeInterface;
 
-class StringSortedLinkedList
+class StringSortedLinkedList extends AbstractSortedLinkedList
 {
-    private ?NodeInterface $head = null;
-    private ?NodeInterface $current = null;
-
-    public function add(int $value): void
+    public function add(string $value): void
     {
-        $node = new IntNode($value);
+        $node = new StringNode($value);
         $this->addNode($node);
     }
 
-    public function getFirst(): ?int
+    public function getFirst(): ?string
     {
         return $this->head?->getValue();
     }
 
-    public function getCurrent(): ?int
+    public function getCurrent(): ?string
     {
         return $this->current?->getValue();
     }
 
-    public function getLast(): ?int
+    public function getLast(): ?string
     {
         return $this->getTail($this->head)?->getValue();
     }
@@ -36,7 +34,7 @@ class StringSortedLinkedList
         $this->current = $this->head;
     }
 
-    public function getNext(): ?int
+    public function getNext(): ?string
     {
         $this->current = $this->current->getNext();
 

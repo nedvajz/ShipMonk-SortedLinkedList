@@ -14,7 +14,6 @@ class SortedLinkedListTest extends TestCase
         $sortedLinkedList = SortedLinkedListFactory::createIntegerSortedLinkedList();
         $sortedLinkedList->add(1);
 
-        self::assertTrue(true);
         self::assertSame(1, $sortedLinkedList->getFirst());
 
         $sortedLinkedList->add(5);
@@ -33,14 +32,30 @@ class SortedLinkedListTest extends TestCase
         self::assertSame(3, $sortedLinkedList->getNext());
         self::assertSame(5, $sortedLinkedList->getNext());
         self::assertSame(7, $sortedLinkedList->getNext());
-
-//        $this->expectException();
-
-        $sortedLinkedList->add('string');
     }
 
     public function testStringList(): void
     {
+        $sortedLinkedList = SortedLinkedListFactory::createStringSortedLinkedList();
+        $sortedLinkedList->add('ahoj');
 
+        self::assertSame('ahoj', $sortedLinkedList->getFirst());
+
+        $sortedLinkedList->add('q');
+        self::assertSame('q', $sortedLinkedList->getNext());
+
+        $sortedLinkedList->add('d');
+        self::assertSame('q', $sortedLinkedList->getCurrent());
+        self::assertSame(null, $sortedLinkedList->getNext());
+        self::assertSame('q', $sortedLinkedList->getLast());
+
+        $sortedLinkedList->add('z');
+        self::assertSame('z', $sortedLinkedList->getLast());
+
+        $sortedLinkedList->reset();
+        self::assertSame('ahoj', $sortedLinkedList->getCurrent());
+        self::assertSame('d', $sortedLinkedList->getNext());
+        self::assertSame('q', $sortedLinkedList->getNext());
+        self::assertSame('z', $sortedLinkedList->getNext());
     }
 }
